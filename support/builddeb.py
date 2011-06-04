@@ -11,7 +11,7 @@ except ImportError:
 import constants
 
 
-__appname__ = constants.__app_name__
+__app_name__ = constants.__app_name__
 __description__ = """A Touch Screen Optimized RPN Calculator using Pie Menus
 .
 RPN: Stack based math, come on it is fun
@@ -27,7 +27,7 @@ __email__ = "eopage@byu.net"
 __version__ = constants.__version__
 __build__ = constants.__build__
 __changelog__ = """
-* Port to QT
+* Packaging the GTK version separately
 """.strip()
 
 
@@ -68,7 +68,7 @@ def build_package(distribution):
 		pass
 
 	py2deb.Py2deb.SECTIONS = py2deb.SECTIONS_BY_POLICY[distribution]
-	p = py2deb.Py2deb(__appname__)
+	p = py2deb.Py2deb(__app_name__)
 	p.prettyName = constants.__pretty_app_name__
 	p.description = __description__
 	p.bugTracker = "https://bugs.maemo.org/enter_bug.cgi?product=ejpi"
@@ -99,23 +99,23 @@ def build_package(distribution):
 	p.changelog = __changelog__
 	p.postinstall = __postinstall__
 	p.icon = {
-		"debian": "26x26-ejpi.png",
-		"diablo": "26x26-ejpi.png",
-		"fremantle": "64x64-ejpi.png", # Fremantle natively uses 48x48
+		"debian": "26x26-%s.png" % constants.__app_name__,
+		"diablo": "26x26-%s.png" % constants.__app_name__,
+		"fremantle": "64x64-%s.png" % constants.__app_name__, # Fremantle natively uses 64x64
 	}[distribution]
-	p["/opt/%s/bin" % constants.__appname__] = [ "%s.py" % constants.__appname__ ]
+	p["/opt/%s/bin" % constants.__app_name__] = [ "%s.py" % constants.__app_name__ ]
 	for relPath, files in unflatten_files(find_files("src", ".")).iteritems():
-		fullPath = "/opt/%s/lib" % constants.__appname__
+		fullPath = "/opt/%s/lib" % constants.__app_name__
 		if relPath:
 			fullPath += os.sep+relPath
 		p[fullPath] = list(
 			"|".join((oldName, newName))
 			for (oldName, newName) in files
 		)
-	p["/usr/share/applications/hildon"] = ["%s.desktop" % constants.__appname__]
-	p["/usr/share/icons/hicolor/26x26/hildon"] = ["26x26-ejpi.png|ejpi.png"]
-	p["/usr/share/icons/hicolor/64x64/hildon"] = ["64x64-ejpi.png|ejpi.png"]
-	p["/usr/share/icons/hicolor/scalable/hildon"] = ["scale-ejpi.png|ejpi.png"]
+	p["/usr/share/applications/hildon"] = ["%s.desktop" % constants.__app_name__]
+	p["/usr/share/icons/hicolor/26x26/hildon"] = ["26x26-%s.png|%s.png" % (constants.__app_name__, constants.__app_name__)]
+	p["/usr/share/icons/hicolor/64x64/hildon"] = ["64x64-%s.png|%s.png" % (constants.__app_name__, constants.__app_name__)]
+	p["/usr/share/icons/hicolor/scalable/hildon"] = ["scale-%s.png|%s.png" % (constants.__app_name__, constants.__app_name__)]
 
 	if distribution == "debian":
 		print p

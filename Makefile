@@ -1,4 +1,4 @@
-PROJECT_NAME=ejpi
+PROJECT_NAME=ejpi-gtk
 SOURCE_PATH=src
 SOURCE=$(shell find $(SOURCE_PATH) -iname "*.py")
 PROGRAM=$(SOURCE_PATH)/$(PROJECT_NAME).py
@@ -97,7 +97,7 @@ $(TODO_FILE): $(SOURCE)
 	@- $(TODO_FINDER) $(SOURCE) > $(TODO_FILE)
 
 %.pyc: %.py
-	$(SYNTAX_TEST) $<
+	#$(SYNTAX_TEST) $<
 
 #Makefile Debugging
 #Target to print any variable, can be added to the dependencies of any other target
